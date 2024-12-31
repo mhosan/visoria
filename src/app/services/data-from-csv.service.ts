@@ -23,9 +23,7 @@ export class DataFromCSVService {
     const lines = data.split('\n');
     const result: any[] = [];
     const headers = lines[0].split(';');
-    console.log(headers[1]); //latitud
-    console.log(headers[2]); //longitud
-
+   
     for (let i = 1; i < lines.length; i++) {
       const arrayPoints = [];
       const valores = lines[i].split(';');

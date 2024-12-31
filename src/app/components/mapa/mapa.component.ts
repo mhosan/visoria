@@ -11,41 +11,59 @@ import { HttpClientModule } from '@angular/common/http';
   templateUrl: './mapa.component.html',
   styleUrl: './mapa.component.css'
 })
-export class MapaComponent implements OnInit{
+export class MapaComponent implements OnInit {
   private map!: L.Map;
+  private layerGroup!: L.LayerGroup;
 
   constructor(private dataFromCSVService: DataFromCSVService) { }
 
   ngOnInit(): void {
     this.initMap();
     this.dataFromCSVService.getCSVData().subscribe(data => {
-      console.log(data);
-      // Puedes usar los datos aquí
+      //console.log(data[0].latitud, data[0].longitud);
+      this.addPointsToMap(data);
     });
   }
 
   private initMap(): void {
     const buenosAiresCenter: L.LatLngTuple = [-36.6167, -60.7000];
-    this.map = L.map('map').setView(buenosAiresCenter, 7);
+    this.map = L.map('map').setView(buenosAiresCenter, 4);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
       attribution: '© OpenStreetMap'
     }).addTo(this.map);
-    
-    const defaultIcon = L.icon({
-      iconUrl: 'assets/images/marker-icon.png',
-      shadowUrl: 'assets/images/marker-shadow.png',
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
-      shadowSize: [41, 41]
-    });
 
-    L.Marker.prototype.options.icon = defaultIcon;
-   
-    //L.marker([51.505, -0.09]).addTo(this.map)
-    //  .bindPopup('A pretty CSS3 popup.<br> Easily customizable.')
-    //  .openPopup();
+    this.layerGroup = L.layerGroup().addTo(this.map);
+  }
+
+  private addPointsToMap(data: any[]): void {
+    const batchSize = 10000; // Tamaño del lote
+    let index = 0;
+
+    const addBatch = () => {
+      const batch = data.slice(index, index + batchSize);
+      batch.forEach(point => {
+        const lat = parseFloat(point.latitud);
+        const lng = parseFloat(point.longitud);
+        if (!isNaN(lat) && !isNaN(lng)) {
+          L.circleMarker([lat, lng], {
+            radius: 3,
+            color: 'blue',
+            fillColor: '#30f',
+            fillOpacity: 0.5
+          }).bindPopup(`Latitud: ${lat}, Longitud: ${lng}`).addTo(this.layerGroup);
+       }
+      });
+      index += batchSize;
+      alert(`Lote de ${batchSize} puntos agregado. ${index}`); // Alert al finalizar cada lote
+      if (index < data.length) {
+        setTimeout(addBatch, 100); // Espera 100ms antes de agregar el siguiente lote
+      } else {
+        alert('Todos los puntos han sido agregados.'); // Alert final al terminar todos los puntos
+      }
+    };
+
+    addBatch();
   }
 }
