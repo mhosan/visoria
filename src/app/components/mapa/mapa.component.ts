@@ -1,19 +1,27 @@
 import { Component, OnInit } from '@angular/core';
 import * as L from 'leaflet';
+import { DataFromCSVService } from '../../services/data-from-csv.service';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @Component({
   selector: 'app-mapa',
   standalone: true,
-  imports: [],
+  imports: [HttpClientModule],
   templateUrl: './mapa.component.html',
   styleUrl: './mapa.component.css'
 })
 export class MapaComponent implements OnInit{
   private map!: L.Map;
 
+  constructor(private dataFromCSVService: DataFromCSVService) { }
+
   ngOnInit(): void {
     this.initMap();
+    this.dataFromCSVService.getCSVData().subscribe(data => {
+      console.log(data);
+      // Puedes usar los datos aquí
+    });
   }
 
   private initMap(): void {
