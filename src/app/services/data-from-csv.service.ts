@@ -19,19 +19,23 @@ export class DataFromCSVService {
   }
 
   private parseCSV(data: string): any {
+    
     const lines = data.split('\n');
-    const result = [];
-    const headers = lines[0].split(',');
+    const result: any[] = [];
+    const headers = lines[0].split(';');
+    console.log(headers[1]); //latitud
+    console.log(headers[2]); //longitud
 
     for (let i = 1; i < lines.length; i++) {
-      const obj: any = {};
-      const currentline = lines[i].split(';');
-
-      for (let j = 0; j < headers.length; j++) {
-        obj[headers[j]] = currentline[j];
-      }
-
-      result.push(obj);
+      const arrayPoints = [];
+      const valores = lines[i].split(';');
+      const latitud = valores[1];
+      const longitud = valores[2];
+      //console.log(`latitud: ${latitud}, longitud: ${longitud}`); 
+      arrayPoints.push(latitud);
+      arrayPoints.push(longitud);
+      const objCoords = {latitud, longitud};
+      result.push(objCoords);
     }
     return result;
   }
