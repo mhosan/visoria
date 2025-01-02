@@ -10,11 +10,10 @@ import { HttpClientModule } from '@angular/common/http';
 
 
 @Component({
-  selector: 'app-mapa',
-  standalone: true,
-  imports: [HttpClientModule],
-  templateUrl: './mapa.component.html',
-  styleUrl: './mapa.component.css'
+    selector: 'app-mapa',
+    imports: [HttpClientModule],
+    templateUrl: './mapa.component.html',
+    styleUrl: './mapa.component.css'
 })
 export class MapaComponent implements OnInit {
   private map!: L.Map;

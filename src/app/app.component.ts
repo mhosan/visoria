@@ -5,11 +5,10 @@ import { HttpClientModule, provideHttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.css',
-  imports: [CommonModule, HttpClientModule, MapaComponent]
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrl: './app.component.css',
+    imports: [CommonModule, HttpClientModule, MapaComponent]
 })
 export class AppComponent {
   title = 'visoria';
