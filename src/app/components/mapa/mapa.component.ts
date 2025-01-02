@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import * as L from 'leaflet';
 import 'leaflet.markercluster';
-import * as LMC from 'leaflet.markercluster';
-import 'leaflet.markercluster/dist/leaflet.markercluster.js';
-import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
-import 'leaflet.markercluster/dist/MarkerCluster.css';
+
+//import 'leaflet.markercluster/dist/leaflet.markercluster.js';
+//import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
+//import 'leaflet.markercluster/dist/MarkerCluster.css';
 import { DataFromCSVService } from '../../services/data-from-csv.service';
 import { HttpClientModule } from '@angular/common/http';
 

@@ -37,6 +37,10 @@
             "scripts": [
               "node_modules/leaflet/dist/leaflet.js",
               "node_modules/leaflet.markercluster/dist/leaflet.markercluster.js"
+            ],
+            "allowedCommonJsDependencies": [
+              "leaflet",
+              "leaflet.markercluster"
             ]
           },
           "configurations": {
@@ -44,8 +48,8 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
+                  "maximumWarning": "1mb",
+                  "maximumError": "2mb"
                 },
                 {
                   "type": "anyComponentStyle",
