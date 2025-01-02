@@ -11,6 +11,7 @@ import { HttpClientModule } from '@angular/common/http';
 
 @Component({
     selector: 'app-mapa',
+    standalone: true,
     imports: [HttpClientModule],
     templateUrl: './mapa.component.html',
     styleUrl: './mapa.component.css'
