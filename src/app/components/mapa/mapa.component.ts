@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewInit  } from '@angular/core';
 import * as L from 'leaflet';
-import 'leaflet.markercluster';
+//import 'leaflet.markercluster';
 import { DataFromCSVService } from '../../services/data-from-csv.service';
 import { HttpClientModule } from '@angular/common/http';
 
@@ -14,8 +14,8 @@ import { HttpClientModule } from '@angular/common/http';
 })
 export class MapaComponent implements OnInit, AfterViewInit  {
   private map!: L.Map;
-  //private layerGroup!: L.LayerGroup;
-  private markerClusterGroup!: L.MarkerClusterGroup;
+  private layerGroup!: L.LayerGroup;
+  //private markerClusterGroup!: L.MarkerClusterGroup;
 
   constructor(private dataFromCSVService: DataFromCSVService) { }
 
@@ -58,10 +58,10 @@ export class MapaComponent implements OnInit, AfterViewInit  {
       maxZoom: 19,
       attribution: '© OpenStreetMap'
     }).addTo(this.map);
-
-    //this.layerGroup = L.layerGroup().addTo(this.map);
-    this.markerClusterGroup = L.markerClusterGroup();
-    this.map.addLayer(this.markerClusterGroup);
+    
+    this.layerGroup = L.layerGroup().addTo(this.map);
+    //this.markerClusterGroup = L.markerClusterGroup();
+    //this.map.addLayer(this.markerClusterGroup);
   }
 
   private addPointsToMap(data: any[]): void {
@@ -80,7 +80,7 @@ export class MapaComponent implements OnInit, AfterViewInit  {
             fillColor: '#30f',
             fillOpacity: 0.5
           }).bindPopup(`Latitud: ${lat}, Longitud: ${lng}`);
-          this.markerClusterGroup.addLayer(marker);
+          this.layerGroup.addLayer(marker);
         }
       });
       index += batchSize;
