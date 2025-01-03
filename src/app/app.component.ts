@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { MapaLeafletComponent } from "./components/mapa/mapaLeaflet.component";
+import { MapaLeafletComponent } from "./components/mapaLeaflet/mapaLeaflet.component";
 import { HttpClientModule, provideHttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 
