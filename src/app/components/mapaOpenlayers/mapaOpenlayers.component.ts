@@ -1,12 +1,28 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import 'ol/ol.css';
+import { Map, View } from 'ol';
+import TileLayer from 'ol/layer/Tile';
+import OSM from 'ol/source/OSM';
 
 @Component({
   selector: 'app-mapa-openlayers',
   standalone: true,
-  imports: [],
   templateUrl: './mapaOpenlayers.component.html',
-  styleUrl: './mapaOpenlayers.component.css'
+  styleUrls: ['./mapaOpenlayers.component.css']
 })
-export class MapaOpenlayersComponent {
-
+export class MapaOpenlayersComponent implements OnInit {
+  ngOnInit(): void {
+    const map = new Map({
+      target: 'map',
+      layers: [
+        new TileLayer({
+          source: new OSM()
+        })
+      ],
+      view: new View({
+        center: [0, 0],
+        zoom: 2
+      })
+    });
+  }
 }

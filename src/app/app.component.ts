@@ -1,15 +1,13 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { HttpClientModule, provideHttpClient } from '@angular/common/http';
-import { CommonModule } from '@angular/common';
-import { HomeComponent } from './components/home/home.component';
+import { HttpClientModule } from '@angular/common/http';
+import { RouterOutlet } from '@angular/router'; 
 
 @Component({
-    selector: 'app-root',
-    standalone: true,
-    templateUrl: './app.component.html',
-    styleUrl: './app.component.css',
-    imports: [CommonModule, HttpClientModule, HomeComponent]
+  selector: 'app-root',
+  standalone: true,
+  imports: [RouterOutlet, HttpClientModule],
+  templateUrl: './app.component.html',
+  styleUrl: './app.component.css',
 })
 export class AppComponent {
   title = 'visoria';
