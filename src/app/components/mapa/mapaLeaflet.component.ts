@@ -6,13 +6,13 @@ import { HttpClientModule } from '@angular/common/http';
 
 
 @Component({
-    selector: 'app-mapa',
+    selector: 'app-mapa-leaflet',
     standalone: true,
     imports: [HttpClientModule],
-    templateUrl: './mapa.component.html',
-    styleUrl: './mapa.component.css'
+    templateUrl: './mapaLeaflet.component.html',
+    styleUrl: './mapaLeaflet.component.css'
 })
-export class MapaComponent implements OnInit, AfterViewInit  {
+export class MapaLeafletComponent implements OnInit, AfterViewInit  {
   private map!: L.Map;
   private layerGroup!: L.LayerGroup;
   //private markerClusterGroup!: L.MarkerClusterGroup;

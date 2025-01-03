@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { MapaComponent } from "./components/mapa/mapa.component";
+import { MapaLeafletComponent } from "./components/mapa/mapaLeaflet.component";
 import { HttpClientModule, provideHttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 
@@ -9,7 +9,7 @@ import { CommonModule } from '@angular/common';
     standalone: true,
     templateUrl: './app.component.html',
     styleUrl: './app.component.css',
-    imports: [CommonModule, HttpClientModule, MapaComponent]
+    imports: [CommonModule, HttpClientModule, MapaLeafletComponent]
 })
 export class AppComponent {
   title = 'visoria';
