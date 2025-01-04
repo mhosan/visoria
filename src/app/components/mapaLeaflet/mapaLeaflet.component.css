@@ -1,17 +1,16 @@
+/* Estilos generales (ejemplo) */
+body {
+  margin: 0; /* Elimina márgenes por defecto del body */
+}
+
+/* Estilos del componente mapa */
 :host {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 94vh;
-  margin-top: -10px
+  display: block; /* o flex, grid, según tu layout */
+  height: calc(100vh - 60px); /* Ajusta 60px según sea necesario */
+  width: 100%; /* O un ancho específico */
 }
 
 #map {
-  height: 90%;
-  width: 95%;
-}
-
-.leaflet-container {
-  width: 100%;
   height: 100%;
+  width: 100%;
 }

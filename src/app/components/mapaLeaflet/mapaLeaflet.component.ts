@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import * as L from 'leaflet';
 //import 'leaflet.markercluster';
 import { DataFromCSVService } from '../../services/data-from-csv.service';
@@ -11,7 +11,7 @@ import { DataFromCSVService } from '../../services/data-from-csv.service';
   templateUrl: './mapaLeaflet.component.html',
   styleUrl: './mapaLeaflet.component.css'
 })
-export class MapaLeafletComponent implements OnInit, AfterViewInit {
+export class MapaLeafletComponent implements OnInit, AfterViewInit, OnDestroy {
   private map!: L.Map;
   private layerGroup!: L.LayerGroup;
   //private markerClusterGroup!: L.MarkerClusterGroup;
@@ -19,37 +19,38 @@ export class MapaLeafletComponent implements OnInit, AfterViewInit {
   constructor(private dataFromCSVService: DataFromCSVService) { }
 
   ngOnInit(): void {
-    this.dataFromCSVService.getCSVData().subscribe(data => {
-      this.addPointsToMap(data);
-    });
+    //this.dataFromCSVService.getCSVData().subscribe(data => {
+    //  this.addPointsToMap(data);
+    //});
   }
 
   ngAfterViewInit() {
-    this.initMap();
+    //this.initMap();
+    setTimeout(() => {
+      this.initMap();
+      this.dataFromCSVService.getCSVData().subscribe(data => {
+        this.addPointsToMap(data);
+      });
+    }, 500);
+    
+    window.addEventListener('resize', this.onResize); // Agregar listener
+  }
+  ngOnDestroy() {
+    window.removeEventListener('resize', this.onResize); // Remover listener
+    if (this.map) {
+      this.map.remove(); // Elimina el mapa de Leaflet
+  }
+  }
+  private onResize = () => {
+    if (this.map) {
+      setTimeout(() => { // Timeout para asegurar que el DOM se actualice
+        this.map.invalidateSize();
+      }, 100);
+    }
   }
 
   private initMap(): void {
-    /*   // Sobrescribir el método on de L.DomEvent para usar listeners pasivos
-      const originalOn = L.DomEvent.on;
-      L.DomEvent.on = function(
-        el: HTMLElement,
-        types: string | { [eventName: string]: L.DomEvent.EventHandlerFn },
-        fn?: L.DomEvent.EventHandlerFn | any,
-        context?: any
-      ): typeof L.DomEvent {
-        if (typeof types === 'string' && typeof fn === 'function') {
-          const passiveTypes = ['touchstart', 'touchmove', 'wheel', 'mousewheel'];
-          if (passiveTypes.some(type => types.indexOf(type) !== -1)) {
-            types.split(' ').forEach(type => {
-              el.addEventListener(type, fn, { passive: true });
-            });
-            return L.DomEvent;
-          }
-        }
-        // Usar apply para pasar los argumentos correctamente
-        return originalOn.apply(L.DomEvent, arguments as any);
-      }; */
-
+    
     const buenosAiresCenter: L.LatLngTuple = [-36.6167, -60.7000];
     this.map = L.map('map').setView(buenosAiresCenter, 5);
 
@@ -64,7 +65,12 @@ export class MapaLeafletComponent implements OnInit, AfterViewInit {
   }
 
   private addPointsToMap(data: any[]): void {
-    const batchSize = 1000; // Tamaño del lote
+    if (!this.map) {
+      console.error("El mapa no se ha inicializado todavía!");
+      return; // Sale de la función si el mapa no está listo
+    }
+  
+    const batchSize = 10000; // Tamaño del lote
     let index = 0;
 
     const addBatch = () => {
@@ -72,6 +78,7 @@ export class MapaLeafletComponent implements OnInit, AfterViewInit {
       batch.forEach(point => {
         const lat = parseFloat(point.latitud);
         const lng = parseFloat(point.longitud);
+        //console.log(`Latitud: ${lat}, Longitud: ${lng}`);
         if (!isNaN(lat) && !isNaN(lng)) {
           const marker = L.circleMarker([lat, lng], {
             radius: 2,
@@ -80,18 +87,21 @@ export class MapaLeafletComponent implements OnInit, AfterViewInit {
             fillOpacity: 0.5
           }).bindPopup(`Latitud: ${lat}, Longitud: ${lng}`);
           this.layerGroup.addLayer(marker);
+        } else {
+          console.error(`Coordenadas inválidas: Latitud: ${point.latitud}, Longitud: ${point.longitud}`);
         }
       });
       index += batchSize;
-      alert(`Lote de ${batchSize} puntos agregado. ${index}`); // Alert al finalizar cada lote
       //if (index < data.length) {
-        if (index < 2100) {
-        setTimeout(addBatch, 100); // Espera 100ms antes de agregar el siguiente lote
+      if (index < 30000) {
+        console.log(`Agregados ${index} puntos de ${data.length}`);
+        //setTimeout(addBatch, 500);
+        requestAnimationFrame(addBatch); // Usar requestAnimationFrame
       } else {
-        alert('Todos los puntos han sido agregados.'); // Alert final al terminar todos los puntos
+        console.log(`Agregados ${index} puntos de un total de ${data.length}.`);
       }
     };
-
-    addBatch();
+    //addBatch();
+    requestAnimationFrame(addBatch); // Iniciar con requestAnimationFrame
   }
 }
