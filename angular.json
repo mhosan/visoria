@@ -30,11 +30,13 @@
             ],
             "styles": [
               "src/styles.css",
-              "node_modules/leaflet/dist/leaflet.css"
+              "node_modules/leaflet/dist/leaflet.css",
+              "node_modules/ol/ol.css"
             ],
             "scripts": [
               "node_modules/leaflet/dist/leaflet.js"
             ],
+            "baseHref": "/visoria/",
             "allowedCommonJsDependencies": [
               "leaflet",
               "leaflet.markercluster"
@@ -97,7 +99,8 @@
             ],
             "styles": [
               "src/styles.css",
-              "node_modules/leaflet/dist/leaflet.css"
+              "node_modules/leaflet/dist/leaflet.css",
+              "node_modules/ol/ol.css"
             ],
             "scripts": [
               "node_modules/leaflet/dist/leaflet.js"
