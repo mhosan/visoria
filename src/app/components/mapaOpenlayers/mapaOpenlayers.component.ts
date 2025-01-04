@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import 'ol/ol.css';
 import { Map, View } from 'ol';
 import TileLayer from 'ol/layer/Tile';
@@ -8,9 +8,10 @@ import Feature from 'ol/Feature';
 import Point from 'ol/geom/Point';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
-import { fromLonLat } from 'ol/proj';
-import { Style, Circle, Fill, Stroke  } from 'ol/style';
+import { fromLonLat, toLonLat } from 'ol/proj';
+import { Style, Circle, Fill, Stroke } from 'ol/style';
 import Overlay from 'ol/Overlay';
+
 
 @Component({
   selector: 'app-mapa-openlayers',
@@ -18,9 +19,9 @@ import Overlay from 'ol/Overlay';
   templateUrl: './mapaOpenlayers.component.html',
   styleUrls: ['./mapaOpenlayers.component.css']
 })
-export class MapaOpenlayersComponent implements OnInit {
-  private map!: Map; // Declarar la propiedad map
-  private overlay!: Overlay; // Declarar la propiedad overlay
+export class MapaOpenlayersComponent implements OnInit, AfterViewInit {
+  private map!: Map; 
+  private overlay!: Overlay; 
 
   constructor(private dataFromCSVService: DataFromCSVService) { }
 
@@ -31,7 +32,7 @@ export class MapaOpenlayersComponent implements OnInit {
     });
   }
 
-  private initMap(): void {
+  ngAfterViewInit(): void {
     this.overlay = new Overlay({
       element: document.getElementById('popup')!,
       autoPan: {
@@ -41,6 +42,34 @@ export class MapaOpenlayersComponent implements OnInit {
       },
     });
 
+    this.map.addOverlay(this.overlay);
+
+    this.map.on('click', (event) => {
+      const feature = this.map.forEachFeatureAtPixel(event.pixel, (feature) => {
+        //console.log(feature);
+        return feature;
+      });
+
+      if (feature) {
+        const coordinates = (feature.getGeometry() as Point).getCoordinates();
+        //console.log(`Coordenadas: ${coordinates}`);
+        const lonLat = toLonLat(coordinates);
+        //console.log(`Latitud: ${lonLat[1]}, Longitud: ${lonLat[0]}`);
+        const popupContent = `<div>Latitud: ${lonLat[1]}, Longitud: ${lonLat[0]}</div>`;
+        const popupElement = document.getElementById('popup-content');
+        if (popupElement) {
+          popupElement.innerHTML = popupContent;
+        } else {
+          console.error("No se encontró el elemento popup-content");
+        }
+        this.overlay.setPosition(coordinates);
+      } else {
+        this.overlay.setPosition(undefined);
+      }
+    });
+  }
+
+  private initMap(): void {
     this.map = new Map({
       target: 'map',
       layers: [
@@ -53,38 +82,14 @@ export class MapaOpenlayersComponent implements OnInit {
         zoom: 5
       })
     });
-
-    this.map.on('click', (event) => {
-      const feature = this.map.forEachFeatureAtPixel(event.pixel, (feature) => {
-        console.log(feature);
-        return feature;
-      });
-
-      if (feature) {
-        const coordinates = (feature.getGeometry() as Point).getCoordinates();
-        const lonLat = fromLonLat(coordinates);
-        const popupContent = `<div>Latitud: ${lonLat[1]}, Longitud: ${lonLat[0]}</div>`;
-        const popupElement = document.getElementById('popup-content');
-        if (popupElement) {
-          popupElement.innerHTML = popupContent;
-        }
-        this.overlay.setPosition(coordinates);
-      } else {
-        this.overlay.setPosition(undefined);
-      }
-    });
   }
-
-  
 
   private addPointsToMap(data: any[]): void {
     if (!this.map) {
       console.error("El mapa no se ha inicializado todavía!");
-      return; // Sale de la función si el mapa no está listo
+      return; 
     }
-
     const vectorSource = new VectorSource();
-
     data.forEach(point => {
       const lat = parseFloat(point.latitud);
       const lng = parseFloat(point.longitud);
@@ -101,13 +106,12 @@ export class MapaOpenlayersComponent implements OnInit {
       style: new Style({
         image: new Circle({
           radius: 5,
-          fill: new Fill({ color: 'blue' }),
+          fill: new Fill({ color: 'red' }),
           stroke: new Stroke({ color: 'white', width: 1 })
         })
       })
     });
 
     this.map.addLayer(vectorLayer);
-
   }
 }
