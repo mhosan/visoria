@@ -67,6 +67,12 @@ export class MapaOpenlayersComponent implements OnInit, AfterViewInit {
         this.overlay.setPosition(undefined);
       }
     });
+
+    // Agregar evento pointermove para cambiar el cursor
+    this.map.on('pointermove', (event) => {
+      const hit = this.map.hasFeatureAtPixel(event.pixel);
+      this.map.getTargetElement().style.cursor = hit ? 'pointer' : '';
+    });
   }
 
   private initMap(): void {
