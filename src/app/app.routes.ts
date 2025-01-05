@@ -7,5 +7,6 @@ export const routes: Routes = [
     { path: '', component: MapaOpenlayersComponent },
     { path: 'leaflet', component: MapaLeafletComponent },
     { path: 'openlayers', component: MapaOpenlayersComponent },
-    { path: '', redirectTo: '/leaflet', pathMatch: 'full' } // Redirigir a 'mapa-leaflet' por defecto
+    { path: '', redirectTo: '/openlayers', pathMatch: 'full' }, // Redirigir a 'mapa-leaflet' por defecto
+    { path: '**', redirectTo: '/openlayers', pathMatch: 'full' } // Redirigir a 'leaflet' en caso de path no existente
   ];
