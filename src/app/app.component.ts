@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
-import { RouterModule, RouterOutlet, provideRouter } from '@angular/router';
+import { RouterModule, RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { routes } from './app.routes'; 
+import { DataFromCSVService } from './services/data-from-csv.service';
 
 @Component({
   selector: 'app-root',
@@ -17,5 +17,14 @@ import { routes } from './app.routes';
   styleUrl: './app.component.css',
 })
 export class AppComponent {
+  npuntos: number = 0;
+  constructor(private dataFromCSVService: DataFromCSVService) { }
+  
+  ngOnInit(): void {
+    this.dataFromCSVService.getCSVData().subscribe(data => {
+      this.npuntos = data.length;
+    });
+  }
+
   title = 'visoria';
 }
