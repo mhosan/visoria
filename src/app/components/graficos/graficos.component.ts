@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { CommonModule } from '@angular/common';
 import * as Papa from 'papaparse';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-graficos',
@@ -24,7 +25,7 @@ export class GraficosComponent {
   }
 
   loadCSV() {
-    Papa.parse('/assets/data/lotesDepurado.csv', {
+    Papa.parse(environment.CSVpath, {
       download: true,
       header: true,
       complete: (result) => {
